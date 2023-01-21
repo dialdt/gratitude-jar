@@ -16,8 +16,6 @@ function App() {
   const [currentUID, setCurrentUID] = useState()
   const provider = new GoogleAuthProvider();
 
-  console.log(messages)
-
   const firebaseConfig = {
     apiKey: "AIzaSyAZ5_P5jqxM6ctmZFTqSHQ2Y565kQko8JY",
     authDomain: "gratitude-jar-79dfa.firebaseapp.com",
@@ -36,7 +34,6 @@ function App() {
 
   useEffect(() => onSnapshot(collection(db, "messages"), (snapshot) =>
       setMessages(snapshot.docs.map(doc => doc.data()))
-      //console.log(snapshot.docs.map(doc => doc.data()))
   ),[db])
 
   useEffect(() => {
@@ -63,7 +60,6 @@ function App() {
   const formatDate = (date) => {
     const outputDate= new Date(date.seconds * 1000)
     //onst outputDate = Date.parse(UKFormat)
-    console.log(outputDate)
     return outputDate
   }
 
@@ -96,11 +92,7 @@ const showContent = () => {
   }
 }
 
-console.log(allowedUsers)
-//console.log(auth.currentUser.uid)
-console.log(loggedIn)
-console.log(allowedUsers.includes(currentUID, 0))
-console.log(showContent())
+console.log(currentUID)
   
   return (
     <div className="App">
