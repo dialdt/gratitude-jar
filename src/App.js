@@ -56,26 +56,25 @@ function App() {
     addDoc(collection(db, "messages"), {
       message: newMessage,
       name: newMessageUser,
-      date: serverTimestamp()
+      date: new Date()
     })
   }
 
   const getWeekNumber = (fromDate) => {
     //var weekNumber = 0
-    const d = new Date(fromDate).toLocaleDateString("en-GB")
     // const startDate = new Date(d.getFullYear(), 0, 1).getTime()
     // const days = Math.floor((d.getTime() - startDate) / (24 * 60 * 60 * 1000))
     // console.log(d.toLocaleDateString("en-GB", { timeZone: 'UTC' }))
     // console.log(days)
     // var a = moment([startDate])
     // var b = moment([d])
-    return moment(d).week()
+    return moment(fromDate).week()
 
   }
 
   const formatDate = (date) => {
-    console.log(date)
-    const outputDate = new Date(date.seconds * 1000).toLocaleDateString("en-GB", { timeZone: 'UTC' })
+    const outputDate= new Date(date.seconds * 1000)
+    //onst outputDate = Date.parse(UKFormat)
     console.log(outputDate)
     return outputDate
   }
@@ -123,7 +122,7 @@ console.log(showContent())
       <body>
         <div className="container px-4 text-center">
           <div className="row">
-            <button type="submit" class="btn btn-primary mb-3" onClick={signIn} hidden={loggedIn}> Sign in with Google</button>
+            <button type="submit" className="btn btn-primary mb-3" onClick={signIn} hidden={loggedIn}> Sign in with Google</button>
           </div>
 
 
@@ -136,8 +135,8 @@ console.log(showContent())
               <div className="input-group col">
                 <span className="input-group-text">I am grateful for...</span>
                 <textarea className="form-control" aria-label="grateful-comments" onChange={(e) => setNewMessage(e.target.value)}></textarea>
-                <select class="form-select form-select-sm" aria-label=".form-select-sm example" onChange={(e) => setNewMessageUser(e.target.value)}>
-                  <option selected>Open this select menu</option>
+                <select className = "form-select form-select-sm" aria-label=".form-select-sm example" onChange={(e) => setNewMessageUser(e.target.value)}>
+                  <option defaultValue>Open this select menu</option>
                   <option value="Isla">Isla</option>
                   <option value="Isabelle">Isabelle</option>
                   <option value="Daddy">Daddy</option>
@@ -146,7 +145,7 @@ console.log(showContent())
               </div>
               <div className = "row gy-3">
                 <div className="col gx-3">
-                  <button type="submit" class="btn btn-primary mb-3" onClick={(e) => postData(e)}>Post</button>
+                  <button type="submit" className="btn btn-primary mb-3" onClick={(e) => postData(e)}>Post</button>
                 </div>
               </div>
             </form>
@@ -155,10 +154,10 @@ console.log(showContent())
               <div className = "col">
                 <div key={index} className="card p-3">
                   <div className='card-body'>
-                      <h5 class="card-title">{message.name}</h5>
-                      <p className="badge text-bg-success">Week { getWeekNumber(formatDate(message.date)) }</p>
-                      <p>{formatDate(message.date)}</p>
-                      <p class="card-text">{message.message}</p>
+                      <h5 className="card-title">{message.name}</h5>
+                      <p className="badge text-bg-success">Week { moment(formatDate(message.date)).week() }</p>
+                      <p>{new Date(message.date.seconds * 1000).toLocaleDateString("en-GB")}</p>
+                      <p className="card-text">{message.message}</p>
                     </div>
                   </div>
                 </div>
@@ -167,7 +166,7 @@ console.log(showContent())
             </div>
           </div>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD" crossOrigin="anonymous"></script>
       </body>
     </div>
   );
