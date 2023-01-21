@@ -1,8 +1,8 @@
 import './App.css';
 import { initializeApp } from "firebase/app";
 import moment from 'moment'
-import { connectFirestoreEmulator, FieldValue, getDoc, getDocs, getFirestore, onSnapshot, Timestamp } from "firebase/firestore"
-import { collection, doc, setDoc, addDoc, serverTimestamp } from "firebase/firestore"; 
+import { getDocs, getFirestore, onSnapshot } from "firebase/firestore"
+import { collection, addDoc } from "firebase/firestore"; 
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 import { useEffect, useState } from 'react';
@@ -37,7 +37,7 @@ function App() {
   useEffect(() => onSnapshot(collection(db, "messages"), (snapshot) =>
       setMessages(snapshot.docs.map(doc => doc.data()))
       //console.log(snapshot.docs.map(doc => doc.data()))
-  ),[])
+  ),[db])
 
   useEffect(() => {
     const getData = async () => {
@@ -48,7 +48,7 @@ function App() {
       })
     }
     getData()
-  },[])
+  },[db])
   
   
   const postData = (e) => {
@@ -58,18 +58,6 @@ function App() {
       name: newMessageUser,
       date: new Date()
     })
-  }
-
-  const getWeekNumber = (fromDate) => {
-    //var weekNumber = 0
-    // const startDate = new Date(d.getFullYear(), 0, 1).getTime()
-    // const days = Math.floor((d.getTime() - startDate) / (24 * 60 * 60 * 1000))
-    // console.log(d.toLocaleDateString("en-GB", { timeZone: 'UTC' }))
-    // console.log(days)
-    // var a = moment([startDate])
-    // var b = moment([d])
-    return moment(fromDate).week()
-
   }
 
   const formatDate = (date) => {
@@ -83,8 +71,8 @@ function App() {
     signInWithPopup(auth, provider)
     .then((result) => {
     // This gives you a Google Access Token. You can use it to access the Google API.
-    const credential = GoogleAuthProvider.credentialFromResult(result);
-    const token = credential.accessToken;
+    //const credential = GoogleAuthProvider.credentialFromResult(result);
+    //const token = credential.accessToken;
     // The signed-in user info.
     const user = result.user;
     setCurrentUID(user.uid)
@@ -92,12 +80,9 @@ function App() {
   // ...
   }).catch((error) => {
     // Handle Errors here.
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    // The email of the user's account used.
-    //const email = error.user.email;
-    // The AuthCredential type that was used.
-    const credential = GoogleAuthProvider.credentialFromError(error);
+    //const errorCode = error.code;
+    //const errorMessage = error.message;
+    //const credential = GoogleAuthProvider.credentialFromError(error);
     // ...
   });
 }
