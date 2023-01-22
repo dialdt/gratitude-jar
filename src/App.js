@@ -1,9 +1,11 @@
 import './App.css';
 import { initializeApp } from "firebase/app";
+import { GiphyFetch } from '@giphy/js-fetch-api'
+import axios from 'axios'
 import moment from 'moment'
 import { getDocs, getFirestore, onSnapshot } from "firebase/firestore"
 import { collection, addDoc } from "firebase/firestore"; 
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, applyActionCode } from "firebase/auth";
 
 import { useEffect, useState } from 'react';
 
@@ -14,7 +16,13 @@ function App() {
   const [newMessageUser, setNewMessageUser] = useState()
   const [messages, setMessages] = useState([])
   const [currentUID, setCurrentUID] = useState()
+  const [gifURL, setGifURL] = useState()
   const provider = new GoogleAuthProvider();
+  const currentDate = new Date()
+  const revealDate = new Date('12-30-2023')
+  const gf = new GiphyFetch('MMVJ0CHUkWNsenwLhA1JCjdiVXArSH7W')
+  
+  const GIPHY_API_KEY = process.env.REACT_APP_GIPHY_API_KEY
 
   const firebaseConfig = {
     apiKey: "AIzaSyAZ5_P5jqxM6ctmZFTqSHQ2Y565kQko8JY",
@@ -46,6 +54,18 @@ function App() {
     }
     getData()
   },[db])
+
+  useEffect(() => {
+    const getData = async () => {
+      console.log('https://api.giphy.com/v1/gifs/random?api_key=' + GIPHY_API_KEY + '&tag=%27wait%27')
+      await axios.get('https://api.giphy.com/v1/gifs/random?api_key=' + GIPHY_API_KEY + '&tag=%27wait%27')
+        .then((response) => {
+          console.log(response.data.data)
+          setGifURL(response.data.data.images.downsized.url)
+        })
+    }
+    getData()
+  },[])
   
   
   const postData = (e) => {
@@ -85,14 +105,20 @@ function App() {
 
 const showContent = () => {
   if (loggedIn && allowedUsers.includes(currentUID, 0)) {
-
     return false
   } else {
     return true
   }
 }
 
-console.log(currentUID)
+const showGratitude = () => {
+  if (currentDate > revealDate) {
+    //show gratitude
+    return false
+  } else {
+    return true
+  }
+}
   
   return (
     <div className="App">
@@ -126,7 +152,11 @@ console.log(currentUID)
                 </div>
               </div>
             </form>
-            <div className="row gx-3 gy-3">
+            <div className="row gx-3 gy-3" hidden={!showGratitude()}>
+              <img src={gifURL} />
+              <h4>{Math.ceil((revealDate - currentDate) / 1000 / 60 / 60 / 24)} days until gratitude reveal</h4>
+            </div>
+            <div className="row gx-3 gy-3" hidden={showGratitude()}>
               {messages.map((message, index) =>
               <div className = "col">
                 <div key={index} className="card p-3">
