@@ -1,11 +1,10 @@
 import './App.css';
 import { initializeApp } from "firebase/app";
-import { GiphyFetch } from '@giphy/js-fetch-api'
 import axios from 'axios'
 import moment from 'moment'
 import { getDocs, getFirestore, onSnapshot } from "firebase/firestore"
 import { collection, addDoc } from "firebase/firestore"; 
-import { getAuth, signInWithPopup, GoogleAuthProvider, applyActionCode } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 import { useEffect, useState } from 'react';
 
@@ -20,7 +19,6 @@ function App() {
   const provider = new GoogleAuthProvider();
   const currentDate = new Date()
   const revealDate = new Date('12-30-2023')
-  const gf = new GiphyFetch('MMVJ0CHUkWNsenwLhA1JCjdiVXArSH7W')
   
   const GIPHY_API_KEY = process.env.REACT_APP_GIPHY_API_KEY
 
@@ -65,7 +63,7 @@ function App() {
         })
     }
     getData()
-  },[])
+  },[GIPHY_API_KEY])
   
   
   const postData = (e) => {
@@ -153,7 +151,7 @@ const showGratitude = () => {
               </div>
             </form>
             <div className="row gx-3 gy-3" hidden={!showGratitude()}>
-              <img src={gifURL} />
+              <img src={gifURL} alt="wait gif" />
               <h4>{Math.ceil((revealDate - currentDate) / 1000 / 60 / 60 / 24)} days until gratitude reveal</h4>
             </div>
             <div className="row gx-3 gy-3" hidden={showGratitude()}>
