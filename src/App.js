@@ -55,10 +55,8 @@ function App() {
 
   useEffect(() => {
     const getData = async () => {
-      console.log('https://api.giphy.com/v1/gifs/random?api_key=' + GIPHY_API_KEY + '&tag=%27wait%27')
       await axios.get('https://api.giphy.com/v1/gifs/random?api_key=' + GIPHY_API_KEY + '&tag=%27wait%27')
         .then((response) => {
-          console.log(response.data.data)
           setGifURL(response.data.data.images.downsized.url)
         })
     }
