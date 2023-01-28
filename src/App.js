@@ -16,6 +16,7 @@ function App() {
   const [messages, setMessages] = useState([])
   const [currentUID, setCurrentUID] = useState()
   const [gifURL, setGifURL] = useState()
+  const [successfulPost, setSuccessfulPost] = useState(false)
   const provider = new GoogleAuthProvider();
   const currentDate = new Date()
   const revealDate = new Date('12-30-2023')
@@ -71,6 +72,7 @@ function App() {
       name: newMessageUser,
       date: new Date()
     })
+    showPostSuccessful()
   }
 
   const formatDate = (date) => {
@@ -115,6 +117,12 @@ const showGratitude = () => {
     return true
   }
 }
+
+const showPostSuccessful = () => {
+  setSuccessfulPost(true)
+  setTimeout(() => setSuccessfulPost(false), 3000)
+
+}
   
   return (
     <div className="App">
@@ -132,6 +140,9 @@ const showGratitude = () => {
             <div className="row">
               <form>
               <div className="input-group col">
+                <div class="alert alert-success" role="alert" hidden={!successfulPost}>
+                  Posted successfully
+                </div>
                 <span className="input-group-text">I am grateful for...</span>
                 <textarea className="form-control" aria-label="grateful-comments" onChange={(e) => setNewMessage(e.target.value)}></textarea>
                 <select className = "form-select form-select-sm" aria-label=".form-select-sm example" onChange={(e) => setNewMessageUser(e.target.value)}>
